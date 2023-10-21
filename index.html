@@ -1,0 +1,234 @@
+<canvas class="app" width="500" height="580"></canvas>
+<div class="modes">
+  <h1 class="showModes">...</h1>
+  <ul class="hide">
+    <li class="circle">Circle</li>
+    <hr />
+    <li class="rectangle">Rectangle</li>
+    <hr />
+    <li class="square">Square</li>
+    <hr />
+    <li class="about">About</li>
+  </ul>
+</div>
+<script>
+  //Main Function
+  document.addEventListener("DOMContentLoaded", function showModes() {
+    var modes = document.querySelector(".modes");
+    var ul = document.querySelector(".hide");
+    var li = document.querySelector("li");
+    var h1 = document.querySelector("h1");
+    var rectangle = document.querySelector(".rectangle");
+    var choosed_shape;
+    if (choosed_shape == null || choosed_shape == undefined) {
+      choosed_shape = "circle";
+    }
+    h1.addEventListener("click", () => {
+      if (ul.className === "hide") {
+        ul.className = "seen";
+      } else {
+        ul.className = "hide";
+      }
+      ul.addEventListener("click", (e) => {
+        document.querySelector(`.${choosed_shape}`).style.color = "white";
+        choosed_shape = e.target.innerText.toLowerCase();
+        document.querySelector(`.${choosed_shape}`).style.color = "red";
+
+        document.querySelector(`.${choosed_shape}`).style.color = "red";
+
+        //clicked Function
+        if (choosed_shape === "circle") {
+          let app = document.querySelector(".app");
+          let ctx = app.getContext("2d");
+
+          let increx = 0,
+            increy = 0,
+            startingx = 200,
+            startingy = 0;
+
+          let increxx = 0,
+            increyy = 0,
+            startingxx = 100,
+            startingyy = 0;
+
+          function startloop() {
+            // Check if the ball is outside of the canvas.
+            document.addEventListener("mousemove", function (event) {
+              // Get the X and Y coordinates of the mouse cursor.
+              const x = event.pageX;
+              startingxx = x;
+            });
+
+            ctx.clearRect(0, 0, 500, 800);
+
+            if (app.height <= startingy + 49) {
+              increy = 0;
+              increyy = 0;
+            } else {
+              increy += 0.1;
+              increyy += 0.1;
+            }
+
+            startingy += increy;
+            startingyy += increyy;
+            // Draw the two circles.
+
+            ctx.beginPath();
+            ctx.arc(startingxx, startingyy, 39, 0, 2 * Math.PI);
+
+            ctx.fillStroke = "red";
+            ctx.stroke();
+            // Calculate the distance between the centers of the two circles.
+            ctx.beginPath();
+            ctx.arc(startingx, startingy, 49, 0, 2 * Math.PI);
+            ctx.stroke();
+            let distance = Math.sqrt(
+              (startingxx - startingx) ** 2 + (startingyy - startingy) ** 2
+            );
+            if (startingxx + 39 >= app.width) {
+              startingxx -= 1;
+            }
+            // Check if the circles are colliding.
+            if (distance <= 39 + 49) {
+              // The circles are colliding.
+
+              ctx.strokeStyle = "green";
+
+              if (startingxx >= 110) {
+                startingx -= 1;
+              } else if (startingxx <= 290) {
+                startingx += 1;
+              }
+            } else {
+              // The circles are not colliding.
+
+              ctx.strokeStyle = "red";
+              //ctx.fillStyle = "red";
+            }
+            // }, 500);
+            requestAnimationFrame(startloop);
+          }
+          startloop();
+        }
+        //For Rectangle
+        if (choosed_shape === "rectangle") {
+          rectangle.click();
+          let app = document.querySelector(".app");
+          let ctx = app.getContext("2d");
+
+          let increx = 0,
+            increy = 0,
+            startingx = 200,
+            startingy = 0;
+
+          let increxx = 0,
+            increyy = 0,
+            startingxx = 100,
+            startingyy = 0;
+
+          function startloop() {
+            // Check if the ball is outside of the canvas.
+            document.addEventListener("mousemove", function (event) {
+              // Get the X and Y coordinates of the mouse cursor.
+              const x = event.pageX;
+              startingxx = x;
+            });
+
+            ctx.clearRect(0, 0, 500, 800);
+            if (startingxx + 190 >= app.width) {
+              startingxx = 320;
+            }
+            if (app.height <= startingy + 110) {
+              increy = 0;
+              increyy = 0;
+            } else {
+              increy += 0.1;
+              increyy += 0.1;
+            }
+
+            startingy += increy;
+            startingyy += increyy;
+            // Draw the two circles.
+
+            ctx.beginPath();
+
+            ctx.rect(300, 480, 180, 100);
+            ctx.stroke();
+            // Calculate the distance between the centers of the two circles.
+            ctx.beginPath();
+            ctx.rect(startingxx, startingyy, 180, 100);
+            ctx.stroke();
+
+            if (startingxx >= app.width) {
+              startingxx -= 1;
+            }
+            // Check if the rectangles are colliding.
+            if (startingxx + 80 >= 200 && startingxx <= 180 + 200) {
+              // The rectangles are colliding.
+
+              ctx.strokeStyle = "green";
+            } else {
+              // The circles are not colliding.
+
+              ctx.strokeStyle = "red";
+            }
+
+            // }, 500);
+            requestAnimationFrame(startloop);
+          }
+        }
+        startloop();
+      });
+    });
+  });
+</script>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap");
+
+  canvas {
+    border: 2px solid black;
+    background: #212124;
+  }
+  body {
+    font-family: "Poppins", sans-serif;
+  }
+  .showModes {
+    background: transparent;
+    color: white;
+    border: none;
+    position: relative;
+    left: 450px;
+  }
+  .modes {
+    position: relative;
+    bottom: 600px;
+
+    width: 500px;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .seen {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    list-style-type: none;
+    color: white;
+    height: 2vh;
+    width: 100px;
+    position: relative;
+    left: 350px;
+    bottom: 30px;
+  }
+
+  .seen > li:hover {
+    cursor: pointer;
+    color: wheat;
+  }
+  .hide {
+    opacity: 0;
+  }
+  h1:hover {
+    cursor: pointer;
+  }
+</style>
